@@ -28,6 +28,7 @@ conn = psycopg2.connect(database = "name",
                         password = "pwd",
                         port = "5432")
 
+
 cursor = conn.cursor()
 # For test of single entry
 sql = getSqlString(name="Stormfuglen",time='2022-01-01 01:24:53+01',position='10.001,55.999',windSpeed=7.6,windDirection=270,heading=180,speed=4.5)
