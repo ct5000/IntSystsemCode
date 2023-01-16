@@ -3,6 +3,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import pandas as pd
 import psycopg2
+import sys
 
 def build_and_compile_model(norm):
     model = tf.keras.Sequential([
@@ -37,26 +38,35 @@ cursor = conn.cursor()
 cursor.execute("SELECT * FROM boatdata WHERE name='Stormfuglen'")
 data_all = np.array(cursor.fetchall())
 
+
 data = data_all[:,3:]
+
+np.random.shuffle(data)
+
 relative_wind = data[:,1] - ((data[:,2]+180) % 360)
 
 data_input = np.array([data[:,0],relative_wind,data[:,3]]).T
 data_input = np.asarray(data_input).astype('float32')
+train_data = data_input[:int(np.round(0.9*len(data_input))),:]
+test_data = data_input[int(np.round(0.9*len(data_input))):,:]
+
+
 
 normalizer = tf.keras.layers.Normalization(axis=-1)
-normalizer.adapt(data_input[:,0:2])
+normalizer.adapt(train_data[:,0:2])
 
 dnn_model = build_and_compile_model(normalizer)
 #dnn_model.summary()
 
-history = dnn_model.fit(data_input[:,0:2],data_input[:,2],validation_split=0.2,verbose=0,epochs=100)
+
+history = dnn_model.fit(train_data[:,0:2],train_data[:,2],validation_split=0.2,verbose=0,epochs=100)
 
 
 plot_loss(history)
 
 
 
-
+dnn_model.save("model1")
 
 
 

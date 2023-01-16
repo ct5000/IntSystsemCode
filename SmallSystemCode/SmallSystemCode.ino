@@ -64,6 +64,7 @@ void loop() {
           //Wait for LoRa time
         }
         start_LoRa = 0;
+        num_GPS_data = 0;
     }
 
 }
