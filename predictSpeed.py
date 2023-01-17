@@ -43,7 +43,9 @@ data = data_all[:,3:]
 
 np.random.shuffle(data)
 
-relative_wind = data[:,1] - ((data[:,2]+180) % 360)
+relative_wind = data[:,1] - ((data[:,2]))
+
+
 
 data_input = np.array([data[:,0],relative_wind,data[:,3]]).T
 data_input = np.asarray(data_input).astype('float32')
@@ -66,10 +68,22 @@ plot_loss(history)
 
 
 
+
+
+predictions = dnn_model.predict(test_data[:,0:2]).flatten()
+
+a = plt.axes(aspect='equal')
+plt.scatter(test_data[:,2],predictions)
+
+plt.xlabel('True speed')
+plt.ylabel('Predicted speed')
+
+plt.show()
+
+
 dnn_model.save("model1")
 
-
-
+reload = tf.keras.models.load_model("model1")
 
 
 conn.close()
