@@ -77,7 +77,7 @@ plt.scatter(test_data[:,2],predictions)
 
 plt.xlabel('True speed')
 plt.ylabel('Predicted speed')
-
+plt.grid()
 plt.show()
 
 
